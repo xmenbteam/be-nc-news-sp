@@ -1,5 +1,186 @@
 const { TestScheduler } = require('jest')
-const { createAuthorRef, formatArticleData, formatDate } = require('../db/utils/data-manipulation')
+const { createArticleRef, formatCommentData, formatDate, createAuthorRef } = require('../db/utils/data-manipulation')
+
+describe('createArticleRef', () => {
+    test('Returns an empty object when passed a n empty array', () => {
+        const articleRows = [];
+        const expected = {};
+        expect(createArticleRef(articleRows)).toEqual(expected);
+    })
+    test('creates object with title:article_id', () => {
+        const articleRows = [{
+            article_id: 1,
+            title: 'Living in the shadow of a great man',
+            topic: 'mitch',
+            author: 'butter_bridge',
+            body: 'I find this existence challenging',
+            created_at: 1542284514171,
+            votes: 100,
+        }]
+        const expected = { 'Living in the shadow of a great man': 1 }
+        expect(createArticleRef(articleRows)).toEqual(expected);
+    })
+    test('creates object with multiple title:article_id key value pairs', () => {
+        const articleRows = [{
+            article_id: 1,
+            title: 'Living in the shadow of a great man',
+            topic: 'mitch',
+            author: 'butter_bridge',
+            body: 'I find this existence challenging',
+            created_at: 1542284514171,
+            votes: 100,
+        },
+        {
+            article_id: 2,
+            title: 'Sony Vaio; or, The Laptop',
+            topic: 'mitch',
+            author: 'icellusedkars',
+            body:
+                'Call me Mitchell. Some years ago—never mind how long precisely—having little or no money in my purse, and nothing particular to interest me on shore, I thought I would buy a laptop about a little and see the codey part of the world. It is a way I have of driving off the spleen and regulating the circulation. Whenever I find myself growing grim about the mouth; whenever it is a damp, drizzly November in my soul; whenever I find myself involuntarily pausing before coffin warehouses, and bringing up the rear of every funeral I meet; and especially whenever my hypos get such an upper hand of me, that it requires a strong moral principle to prevent me from deliberately stepping into the street, and methodically knocking people’s hats off—then, I account it high time to get to coding as soon as I can. This is my substitute for pistol and ball. With a philosophical flourish Cato throws himself upon his sword; I quietly take to the laptop. There is nothing surprising in this. If they but knew it, almost all men in their degree, some time or other, cherish very nearly the same feelings towards the the Vaio with me.',
+            created_at: 1416140514171,
+        }];
+        const expected = { 'Living in the shadow of a great man': 1, 'Sony Vaio; or, The Laptop': 2 }
+        expect(createArticleRef(articleRows)).toEqual(expected);
+    })
+    test('does not mutate input', () => {
+        const articleRows = [{
+            article_id: 1,
+            title: 'Living in the shadow of a great man',
+            topic: 'mitch',
+            author: 'butter_bridge',
+            body: 'I find this existence challenging',
+            created_at: 1542284514171,
+            votes: 100,
+        }]
+        createArticleRef(articleRows)
+        expect(articleRows).toEqual([{
+            article_id: 1,
+            title: 'Living in the shadow of a great man',
+            topic: 'mitch',
+            author: 'butter_bridge',
+            body: 'I find this existence challenging',
+            created_at: 1542284514171,
+            votes: 100,
+        }]);
+    })
+})
+
+describe('formatCommentData', () => {
+
+    test('returns an empty array when passed an empty array', () => {
+        const commentData = [];
+        const articleRef = {};
+        const expected = [];
+        expect(formatCommentData(commentData, articleRef)).toEqual(expected)
+    })
+    test('returns comment data with the new name edited in', () => {
+        const commentData = [{
+            body:
+                "Oh, I've got compassion running out of my nose, pal! I'm the Sultan of Sentiment!",
+            belongs_to: "They're not exactly dogs, are they?",
+            created_by: 'butter_bridge',
+            votes: 16,
+            created_at: 1511354163389,
+        }];
+        const articleRef = { "They're not exactly dogs, are they?": 9 };
+        const expected = [{
+            body:
+                "Oh, I've got compassion running out of my nose, pal! I'm the Sultan of Sentiment!",
+            article_id: 9,
+            created_by: 'butter_bridge',
+            votes: 16,
+            created_at: 1511354163389,
+        }];
+        expect(formatCommentData(commentData, articleRef)).toEqual(expected)
+    })
+    test('returns multiple Comments data with the new name edited in', () => {
+        const commentData = [{
+            body:
+                "Oh, I've got compassion running out of my nose, pal! I'm the Sultan of Sentiment!",
+            belongs_to: "They're not exactly dogs, are they?",
+            created_by: 'butter_bridge',
+            votes: 16,
+            created_at: 1511354163389,
+        },
+        {
+            body:
+                'The beautiful thing about treasure is that it exists. Got to find out what kind of sheets these are; not cotton, not rayon, silky.',
+            belongs_to: 'Living in the shadow of a great man',
+            created_by: 'butter_bridge',
+            votes: 14,
+            created_at: 1479818163389,
+        }];
+        const articleRef = { "They're not exactly dogs, are they?": 9, 'Living in the shadow of a great man': 1 };
+        const expected = [{
+            body:
+                "Oh, I've got compassion running out of my nose, pal! I'm the Sultan of Sentiment!",
+            article_id: 9,
+            created_by: 'butter_bridge',
+            votes: 16,
+            created_at: 1511354163389,
+        },
+        {
+            body:
+                'The beautiful thing about treasure is that it exists. Got to find out what kind of sheets these are; not cotton, not rayon, silky.',
+            article_id: 1,
+            created_by: 'butter_bridge',
+            votes: 14,
+            created_at: 1479818163389,
+        }];
+        expect(formatCommentData(commentData, articleRef)).toEqual(expected)
+    })
+    test('doesnt mutate original data', () => {
+        const commentData = [{
+            title: 'Living in the shadow of a great man',
+            topic: 'mitch',
+            author: 'butter_bridge',
+            body: 'I find this existence challenging',
+            created_at: 1542284514171,
+            votes: 100,
+        }]
+        const authorRef = { 'butter-bridge': 'jonny' }
+        formatCommentData(commentData, authorRef);
+        expect(commentData).toEqual([{
+            title: 'Living in the shadow of a great man',
+            topic: 'mitch',
+            author: 'butter_bridge',
+            body: 'I find this existence challenging',
+            created_at: 1542284514171,
+            votes: 100,
+        }])
+    })
+})
+
+describe('formatDate', () => {
+    test('returns empty array when passed an empty array', () => {
+        const input = []
+        const output = []
+        expect(formatDate(input)).toEqual(output);
+    })
+    test('returns article with date when passed article with unix', () => {
+        const input = [
+            {
+                title: 'Living in the shadow of a great man',
+                topic: 'mitch',
+                body: 'I find this existence challenging',
+                created_at: 1542284514171,
+                votes: 100,
+                author: 'jonny'
+            }
+        ]
+        const output = [
+            {
+                title: 'Living in the shadow of a great man',
+                topic: 'mitch',
+                body: 'I find this existence challenging',
+                created_at: new Date(1542284514171),
+                votes: 100,
+                author: 'jonny'
+            }
+        ]
+        expect(formatDate(input)).toEqual(output)
+    })
+})
 
 describe('createAuthorRef', () => {
     test('Returns an empty object when passed a n empty array', () => {
@@ -61,121 +242,3 @@ describe('createAuthorRef', () => {
         }])
     })
 })
-
-describe('formatArticleData', () => {
-
-    test('returns an empty array when passed an empty array', () => {
-        const articleData = [];
-        const authorRef = {};
-        const expected = [];
-        expect(formatArticleData(articleData, authorRef)).toEqual(expected)
-    })
-    test('returns article data with the new name edited in', () => {
-        const articleData = [{
-            title: 'Living in the shadow of a great man',
-            topic: 'mitch',
-            author: 'butter_bridge',
-            body: 'I find this existence challenging',
-            created_at: 1542284514171,
-            votes: 100,
-        }];
-        const authorRef = { butter_bridge: 'jonny' };
-        const expected = [{
-            title: 'Living in the shadow of a great man',
-            topic: 'mitch',
-            author: 'jonny',
-            body: 'I find this existence challenging',
-            created_at: 1542284514171,
-            votes: 100,
-        }];
-        expect(formatArticleData(articleData, authorRef)).toEqual(expected)
-    })
-    test('returns multiple articles data with the new name edited in', () => {
-        const articleData = [{
-            title: 'Living in the shadow of a great man',
-            topic: 'mitch',
-            author: 'butter_bridge',
-            body: 'I find this existence challenging',
-            created_at: 1542284514171,
-            votes: 100,
-        },
-        {
-            title: 'Sony Vaio; or, The Laptop',
-            topic: 'mitch',
-            author: 'icellusedkars',
-            body:
-                'Call me Mitchell. Some years ago—never mind how long precisely—having little or no money in my purse, and nothing particular to interest me on shore, I thought I would buy a laptop about a little and see the codey part of the world. It is a way I have of driving off the spleen and regulating the circulation. Whenever I find myself growing grim about the mouth; whenever it is a damp, drizzly November in my soul; whenever I find myself involuntarily pausing before coffin warehouses, and bringing up the rear of every funeral I meet; and especially whenever my hypos get such an upper hand of me, that it requires a strong moral principle to prevent me from deliberately stepping into the street, and methodically knocking people’s hats off—then, I account it high time to get to coding as soon as I can. This is my substitute for pistol and ball. With a philosophical flourish Cato throws himself upon his sword; I quietly take to the laptop. There is nothing surprising in this. If they but knew it, almost all men in their degree, some time or other, cherish very nearly the same feelings towards the the Vaio with me.',
-            created_at: 1416140514171,
-        }];
-        const authorRef = { butter_bridge: 'jonny', icellusedkars: 'sam' };
-        const expected = [{
-            title: 'Living in the shadow of a great man',
-            topic: 'mitch',
-            author: 'jonny',
-            body: 'I find this existence challenging',
-            created_at: 1542284514171,
-            votes: 100,
-        },
-        {
-            title: 'Sony Vaio; or, The Laptop',
-            topic: 'mitch',
-            author: 'sam',
-            body:
-                'Call me Mitchell. Some years ago—never mind how long precisely—having little or no money in my purse, and nothing particular to interest me on shore, I thought I would buy a laptop about a little and see the codey part of the world. It is a way I have of driving off the spleen and regulating the circulation. Whenever I find myself growing grim about the mouth; whenever it is a damp, drizzly November in my soul; whenever I find myself involuntarily pausing before coffin warehouses, and bringing up the rear of every funeral I meet; and especially whenever my hypos get such an upper hand of me, that it requires a strong moral principle to prevent me from deliberately stepping into the street, and methodically knocking people’s hats off—then, I account it high time to get to coding as soon as I can. This is my substitute for pistol and ball. With a philosophical flourish Cato throws himself upon his sword; I quietly take to the laptop. There is nothing surprising in this. If they but knew it, almost all men in their degree, some time or other, cherish very nearly the same feelings towards the the Vaio with me.',
-            created_at: 1416140514171,
-        }];
-        expect(formatArticleData(articleData, authorRef)).toEqual(expected)
-    })
-    test('doesnt mutate original data', () => {
-        const articleData = [{
-            title: 'Living in the shadow of a great man',
-            topic: 'mitch',
-            author: 'butter_bridge',
-            body: 'I find this existence challenging',
-            created_at: 1542284514171,
-            votes: 100,
-        }]
-        const authorRef = { 'butter-bridge': 'jonny' }
-        formatArticleData(articleData, authorRef);
-        expect(articleData).toEqual([{
-            title: 'Living in the shadow of a great man',
-            topic: 'mitch',
-            author: 'butter_bridge',
-            body: 'I find this existence challenging',
-            created_at: 1542284514171,
-            votes: 100,
-        }])
-    })
-})
-
-describe('formatDate', () => {
-    test('returns empty array when passed an empty array', () => {
-        const input = []
-        const output = []
-        expect(formatDate(input)).toEqual(output);
-    })
-    test('returns article with date when passed article with unix', () => {
-        const input = [
-            {
-                title: 'Living in the shadow of a great man',
-                topic: 'mitch',
-                body: 'I find this existence challenging',
-                created_at: 1542284514171,
-                votes: 100,
-                author: 'jonny'
-            }
-        ]
-        const output = [
-            {
-                title: 'Living in the shadow of a great man',
-                topic: 'mitch',
-                body: 'I find this existence challenging',
-                created_at: new Date(1542284514171),
-                votes: 100,
-                author: 'jonny'
-            }
-        ]
-        expect(formatDate(input)).toEqual(output)
-    })
-})
-

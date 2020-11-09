@@ -1,3 +1,11 @@
+const createArticleRef = (articleRows) => {
+    const ref = {};
+    articleRows.forEach(article => {
+        ref[article.title] = article.article_id;
+    })
+    return ref;
+}
+
 const createAuthorRef = (userRows) => {
     const ref = {};
     userRows.forEach(user => {
@@ -6,28 +14,31 @@ const createAuthorRef = (userRows) => {
     return ref;
 }
 
-const formatArticleData = (articleData, authorRef) => {
-    const formattedData = articleData
-        .map(({ author, ...restOfArticle }) => {
-            const newArticle = {
-                ...restOfArticle,
-                author: authorRef[author]
+const formatCommentData = (commentData, articleRef) => {
+    const formattedData = commentData
+        .map(({ belongs_to, created_by, ...restOfComment }) => {
+            console.log(created_by)
+            const newComment = {
+                ...restOfComment,
+                article_id: articleRef[belongs_to],
+                author: created_by
             }
-            return newArticle
+            return newComment
         })
     return formattedData
 }
 
-const formatDate = (articleData) => {
-    const formattedArticle = articleData
-        .map(({ created_at, ...restOfArticle }) => {
-            const newArticle = {
-                ...restOfArticle,
-                created_at: new Date(created_at)
+
+const formatDate = (data) => {
+    const formattedData = data
+        .map(({ created_at, ...restOfData }) => {
+            const newData = {
+                ...restOfData,
+                created_at: new Date(created_at),
             }
-            return newArticle
+            return newData
         })
-    return formattedArticle
+    return formattedData
 }
 
-module.exports = { createAuthorRef, formatArticleData, formatDate }
+module.exports = { createArticleRef, formatCommentData, formatDate, createAuthorRef }

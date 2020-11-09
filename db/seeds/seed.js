@@ -6,7 +6,7 @@ const {
   commentData,
 } = require('../data/index.js');
 
-const { createAuthorRef, formatArticleData, formatDate } = require('../utils/data-manipulation')
+const { createArticleRef, formatCommentData, formatDate } = require('../utils/data-manipulation')
 
 exports.seed = function (connection) {
   return connection.migrate
@@ -23,10 +23,16 @@ exports.seed = function (connection) {
     })
     .then((userRows) => {
       console.log(`added ${userRows.length} users`)
-      const authorRef = createAuthorRef(userRows);
-      const formattedArticle = formatArticleData(articleData, authorRef)
-      const dateFormatArticle = formatDate(formattedArticle)
-      console.log(dateFormatArticle)
-      return dateFormatArticle;
+      const dateFormatArticle = formatDate(articleData)
+      return connection.insert(dateFormatArticle).into('articles').returning('*')
+    })
+    .then(articleRows => {
+      console.log(`added ${articleRows.length} users`)
+      const dateFormatComment = formatDate(commentData)
+      const articleRef = createArticleRef(articleRows)
+      const formattedComment = formatCommentData(dateFormatComment, articleRef)
+      console.log(formattedComment)
+
+      return connection.insert(formattedComment).into('comments').returning('*')
     })
 };
