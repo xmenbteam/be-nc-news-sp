@@ -6,6 +6,8 @@ const {
   commentData,
 } = require('../data/index.js');
 
+const { createAuthorRef, formatArticleData, formatDate } = require('../utils/data-manipulation')
+
 exports.seed = function (connection) {
   return connection.migrate
     .rollback()
@@ -21,7 +23,10 @@ exports.seed = function (connection) {
     })
     .then((userRows) => {
       console.log(`added ${userRows.length} users`)
-      console.log(userRows)
-      return userRows
+      const authorRef = createAuthorRef(userRows);
+      const formattedArticle = formatArticleData(articleData, authorRef)
+      const dateFormatArticle = formatDate(formattedArticle)
+      console.log(dateFormatArticle)
+      return dateFormatArticle;
     })
 };
