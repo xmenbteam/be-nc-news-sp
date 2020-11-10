@@ -17,7 +17,6 @@ const createAuthorRef = (userRows) => {
 const formatCommentData = (commentData, articleRef) => {
     const formattedData = commentData
         .map(({ belongs_to, created_by, ...restOfComment }) => {
-            console.log(created_by)
             const newComment = {
                 ...restOfComment,
                 article_id: articleRef[belongs_to],

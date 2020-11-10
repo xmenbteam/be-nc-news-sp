@@ -18,20 +18,20 @@ exports.seed = function (connection) {
       return connection.insert(topicData).into('topics').returning('*');
     })
     .then((topicRows) => {
-      console.log(`added ${topicRows.length} topics`)
+      // console.log(`added ${topicRows.length} topics`)
       return connection.insert(userData).into('users').returning('*');
     })
     .then((userRows) => {
-      console.log(`added ${userRows.length} users`)
+      // console.log(`added ${userRows.length} users`)
       const dateFormatArticle = formatDate(articleData)
       return connection.insert(dateFormatArticle).into('articles').returning('*')
     })
     .then(articleRows => {
-      console.log(`added ${articleRows.length} users`)
+      // console.log(`added ${articleRows.length} users`)
       const dateFormatComment = formatDate(commentData)
       const articleRef = createArticleRef(articleRows)
       const formattedComment = formatCommentData(dateFormatComment, articleRef)
-      console.log(formattedComment)
+      // console.log(formattedComment)
 
       return connection.insert(formattedComment).into('comments').returning('*')
     })
