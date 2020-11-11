@@ -1,5 +1,5 @@
 const send404 = (req, res, next) => {
-    res.status(404).send({ msg: 'Route not found' })
+    res.status(404).send({ msg: 'Article not found' })
 }
 
 const handlePSQLErrors = (err, req, res, next) => {

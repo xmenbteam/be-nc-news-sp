@@ -27,7 +27,6 @@ const formatCommentData = (commentData, articleRef) => {
     return formattedData
 }
 
-
 const formatDate = (data) => {
     const formattedData = data
         .map(({ created_at, ...restOfData }) => {

@@ -99,15 +99,15 @@ You will work through the first endpoint in your pair and then diverge for the r
 _details for each endpoint are provided below_
 
 ```http
-GET /api/topics
+GET /api/topics DONE
 
 >>> Time to go solo! <<<
 
-GET /api/users/:username
+GET /api/users/:username DONE
 
 DELETE /api/articles/:article_id
-PATCH /api/articles/:article_id
-GET /api/articles/:article_id
+PATCH /api/articles/:article_id DONE
+GET /api/articles/:article_id DONE
 
 POST /api/articles/:article_id/comments
 GET /api/articles/:article_id/comments
@@ -154,7 +154,7 @@ _**All of your endpoints should send the below responses in an object, with a ke
 ---
 
 ```http
-GET /api/topics
+GET /api/topics DONE
 ```
 
 #### Responds with
@@ -169,7 +169,7 @@ GET /api/topics
 
 
 ```http
-GET /api/users/:username
+GET /api/users/:username DONE
 ```
 
 #### Responds with
@@ -182,7 +182,7 @@ GET /api/users/:username
 ---
 
 ```http
-GET /api/articles/:article_id
+GET /api/articles/:article_id DONE
 ```
 
 #### Responds with
@@ -201,7 +201,7 @@ GET /api/articles/:article_id
 ---
 
 ```http
-PATCH /api/articles/:article_id
+PATCH /api/articles/:article_id DONE
 ```
 
 #### Request body accepts
@@ -223,7 +223,7 @@ PATCH /api/articles/:article_id
 ---
 
 ```http
-POST /api/articles/:article_id/comments
+POST /api/articles/:article_id/comments DONE
 ```
 
 #### Request body accepts

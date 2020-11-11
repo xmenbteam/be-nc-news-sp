@@ -87,7 +87,7 @@ describe('formatCommentData', () => {
             body:
                 "Oh, I've got compassion running out of my nose, pal! I'm the Sultan of Sentiment!",
             article_id: 9,
-            created_by: 'butter_bridge',
+            author: 'butter_bridge',
             votes: 16,
             created_at: 1511354163389,
         }];
@@ -115,7 +115,7 @@ describe('formatCommentData', () => {
             body:
                 "Oh, I've got compassion running out of my nose, pal! I'm the Sultan of Sentiment!",
             article_id: 9,
-            created_by: 'butter_bridge',
+            author: 'butter_bridge',
             votes: 16,
             created_at: 1511354163389,
         },
@@ -123,7 +123,7 @@ describe('formatCommentData', () => {
             body:
                 'The beautiful thing about treasure is that it exists. Got to find out what kind of sheets these are; not cotton, not rayon, silky.',
             article_id: 1,
-            created_by: 'butter_bridge',
+            author: 'butter_bridge',
             votes: 14,
             created_at: 1479818163389,
         }];
