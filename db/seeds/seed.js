@@ -17,11 +17,11 @@ exports.seed = function (connection) {
     .then(() => {
       return connection.insert(topicData).into('topics').returning('*');
     })
-    .then((topicRows) => {
+    .then(() => {
       // console.log(`added ${topicRows.length} topics`)
       return connection.insert(userData).into('users').returning('*');
     })
-    .then((userRows) => {
+    .then(() => {
       // console.log(`added ${userRows.length} users`)
       const dateFormatArticle = formatDate(articleData)
       return connection.insert(dateFormatArticle).into('articles').returning('*')
