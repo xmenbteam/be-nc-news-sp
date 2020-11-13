@@ -91,45 +91,39 @@ exports.fetchCommentsById = (articleId, sortBy = 'created_at', order = 'DESC') =
         })
 }
 
-exports.fetchAllArticles = () => {
-    console.log('in the model')
+exports.fetchAllArticles = (sort_by = 'created_at', order = 'DESC', author, topic) => {
+    // console.log('in the model')
+    /*
+    Was having a bad time with the ambiguity of the query.
+    NEED ERROR HANDLING.
+    */
+    // console.log(sort_by, 'sortby')
+    if (sort_by === 'date') sort_by = 'created_at'
+    else if (sort_by === 'title') sort_by = 'articles.title'
     return connection
-        .select('title',
-            'article_id',
+        .select('articles.author',
+            'articles.title',
+            'articles.article_id',
             'topic',
-            'created_at',
-            'votes')
-        // .count('comments.article_id AS comment_count')
+            'articles.created_at',
+            'articles.votes')
         .from('articles')
-        // .leftJoin('comments', 'comments.article_id', '=', 'articles.article_id')
-        // .groupBy('articles.article_id')
+        .modify((query) => {
+            if (author) {
+                query.where('articles.author', '=', author)
+            }
+            else if (topic) {
+                query.where('topic', '=', topic)
+            }
+        })
+        .count('comments.article_id AS comment_count')
+        .leftJoin('comments', 'comments.article_id', '=', 'articles.article_id')
+        .groupBy('articles.article_id')
+        .orderBy(sort_by, order)
         .then(response => {
-            response.forEach(article => {
-                console.log(article, 'article in resp')
-                //THIS IS WHERE WE ARE
-            })
-            // console.log(response)
+            // console.log(response, 'model response')
             if (response.length === 0) return Promise
                 .reject({ status: 404, msg: 'Articles not found' })
-            return response
+            else return response;
         })
 }
-
-
-/*
-GET /api/articles
-Responds with
-an articles array of article objects, each of which should have the following properties:
-author which is the username from the users table
-title
-article_id
-topic
-created_at
-votes
-comment_count which is the total count of all the comments with this article_id - you should make use of knex queries in order to achieve this
-Should accept queries
-sort_by, which sorts the articles by any valid column (defaults to date)
-order, which can be set to asc or desc for ascending or descending (defaults to descending)
-author, which filters the articles by the username value specified in the query
-topic, which filters the articles by the topic value specified in the query
-*/

@@ -19,4 +19,13 @@ const handleCustomErrors = (err, req, res, next) => {
     }
 }
 
-module.exports = { send404, handleCustomErrors, handlePSQLErrors }
+const handleInternalErrors = (err, req, res, next) => {
+    /*
+    THIS IS WHERE YOUR ERRORS GO AT THE END
+    Use the console.log to see where your error is coming from.
+    */
+    console.log(err)
+    res.status(500).send({ msg: 'dno m8 soz' })
+}
+
+module.exports = { send404, handleCustomErrors, handlePSQLErrors, handleInternalErrors }
