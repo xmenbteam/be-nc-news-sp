@@ -239,7 +239,7 @@ POST /api/articles/:article_id/comments DONE
 ---
 
 ```http
-GET /api/articles/:article_id/comments
+GET /api/articles/:article_id/comments DONE
 ```
 
 #### Responds with
@@ -259,7 +259,7 @@ GET /api/articles/:article_id/comments
 ---
 
 ```http
-GET /api/articles
+GET /api/articles DONE
 ```
 
 #### Responds with
@@ -283,7 +283,7 @@ GET /api/articles
 ---
 
 ```http
-PATCH /api/comments/:comment_id
+PATCH /api/comments/:comment_id DONE
 ```
 
 #### Request body accepts

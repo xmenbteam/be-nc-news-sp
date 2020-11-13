@@ -3,8 +3,14 @@ const send404 = (req, res, next) => {
 }
 
 const handlePSQLErrors = (err, req, res, next) => {
-    const badReqCodes = [];
-    if (badReqCodes.includes(err.code)) {
+    // const psqlCodes = {
+    //     "22P02": "Incorrect format",
+    //     "42703": "Column does not exist",
+    //     '23503': "No match in other table",
+    //     '23502': "Attempted insertion of null value"
+    // };
+    const psqlCodes = ['22P02', "42703", '23503', '23502']
+    if (psqlCodes.includes(err.code)) {
         res.status(400).send({ msg: 'bad request' })
     } else {
         next(err);

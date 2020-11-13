@@ -12,6 +12,16 @@ exports.updateCommentVote = (id, voteUpdate) => {
             return response[0];
         })
 }
+
+exports.deleteCommentMachine = (id) => {
+    return connection
+        .del()
+        .from('comments')
+        .where('comment_id', id)
+        .then(response => {
+            return response
+        })
+}
 /*
 PATCH / api / comments /: comment_id
 Request body accepts

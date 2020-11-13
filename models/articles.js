@@ -62,8 +62,10 @@ exports.newComment = (article_id, comment) => {
         .insert(formattedCom)
         .returning('*')
         .then(insComment => {
-            // returns an array -> we need an object - return first entry in array.
-            // console.log(insComment)
+            // if (insComment.length === 0) return Promise
+            //     .reject({ status: 404, msg: 'Articles not found' })
+            // // returns an array -> we need an object - return first entry in array.
+            // // console.log(insComment)
             return insComment[0]
         })
 }

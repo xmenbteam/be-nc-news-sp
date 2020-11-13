@@ -1,4 +1,4 @@
-const { updateCommentVote } = require('../models/comments')
+const { updateCommentVote, deleteCommentMachine } = require('../models/comments')
 
 exports.updateCommentById = (req, res, next) => {
     let id = req.params.comment_id
@@ -7,6 +7,17 @@ exports.updateCommentById = (req, res, next) => {
         .then(article => {
             res.status(200)
                 .send(article)
+        }).catch(next)
+}
+
+exports.deleteCommentById = (req, res, next) => {
+
+    let id = req.params.comment_id
+    console.log(id, 'id')
+    deleteCommentMachine(id)
+        .then(comment => {
+            console.log(comment, 'comment in cont')
+            res.sendStatus(204)
         }).catch(next)
 }
 /*

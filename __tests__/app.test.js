@@ -13,7 +13,6 @@ describe('/api', () => {
         return connection.seed.run()
     })
     describe('./api/topics', () => {
-
         test('GETs all topics with status 200', () => {
             return request(app)
                 .get('/api/topics')
@@ -80,7 +79,7 @@ describe('/api', () => {
                     expect(article.comment_count).toBe('13')
                 })
         })
-        test('404 - returns a  error with invalid article_id', () => {
+        test('404 - returns an error with invalid article_id', () => {
             return request(app)
                 .get('/api/articles/583832759')
                 .expect(404)
@@ -128,11 +127,12 @@ describe('/api', () => {
                 body: 'OMG I FREAKING LOVE THIS WOW YOU ARE SO GREAT'
             }
             return request(app)
-                .post('/api/articles/1568151')
+                .post('/api/articles/1568151/comments')
                 .send(newComment)
                 .expect(404)
                 .then(response => {
-                    expect(response.body.msg).toBe('Articles not found')
+                    console.log(response.body)
+                    expect(response.body.msg).toBe('Article not found')
                 })
         })
         test('200 - returns an array of all comments related to an article', () => {
@@ -227,7 +227,7 @@ describe('/api', () => {
                 })
         })
     })
-    describe('comments router', () => {
+    describe('api/comments', () => {
         test('PATCH new voteCount on comment by Id', () => {
             return request(app)
                 .patch('/api/comments/1')
@@ -236,6 +236,11 @@ describe('/api', () => {
                 .then(response => {
                     expect(response.body.votes).toBe(116)
                 })
+        })
+        test('delete comment by comment_id', () => {
+            return request(app)
+                .delete('/api/comments/1')
+                .expect(204)
         })
     })
 })
