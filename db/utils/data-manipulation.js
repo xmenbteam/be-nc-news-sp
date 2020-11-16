@@ -1,3 +1,4 @@
+// Create reference object to link article title and article ID:
 const createArticleRef = (articleRows) => {
     const ref = {};
     articleRows.forEach(article => {
@@ -5,7 +6,8 @@ const createArticleRef = (articleRows) => {
     })
     return ref;
 }
-
+// Create a means to reference author in other tables - 
+// e.g. Article uses user property where previously had username.
 const createAuthorRef = (userRows) => {
     const ref = {};
     userRows.forEach(user => {
@@ -13,7 +15,12 @@ const createAuthorRef = (userRows) => {
     })
     return ref;
 }
-
+/*
+- Formats comments so that they have the right attributes for the specs:
+- Article ID which references the author of the article the comment is associated with
+- Turn 'created by' into 'author'.
+- Use deconstructing to create a new object with new paramaters, .map() the array of objects.
+ */
 const formatCommentData = (commentData, articleRef) => {
     const formattedData = commentData
         .map(({ belongs_to, created_by, ...restOfComment }) => {
@@ -26,6 +33,11 @@ const formatCommentData = (commentData, articleRef) => {
         })
     return formattedData
 }
+
+/*
+- Similar to formatCommentData;
+- uses new Date() - creates new date object which is right now.
+*/
 
 const formatDate = (data) => {
     const formattedData = data

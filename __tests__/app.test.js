@@ -131,7 +131,7 @@ describe('/api', () => {
                 .send(newComment)
                 .expect(404)
                 .then(response => {
-                    console.log(response.body)
+                    // console.log(response.body)
                     expect(response.body.msg).toBe('Article not found')
                 })
         })

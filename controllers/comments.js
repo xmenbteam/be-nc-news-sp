@@ -13,7 +13,7 @@ exports.updateCommentById = (req, res, next) => {
 exports.deleteCommentById = (req, res, next) => {
 
     let id = req.params.comment_id
-    console.log(id, 'id')
+    // console.log(id, 'id')
     deleteCommentMachine(id)
         .then(comment => {
             console.log(comment, 'comment in cont')
