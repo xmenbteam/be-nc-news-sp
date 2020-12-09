@@ -2,13 +2,13 @@ const connection = require('../connection')
 
 exports.updateCommentVote = (id, voteUpdate) => {
     if (voteUpdate === undefined) { return Promise.reject({ status: 400, msg: 'Invalid Patch Request' }) }
-    return connection
-        .select('*')
-        .from('comments')
+    return connection('comments')
         .where('comment_id', id)
+        .increment('votes', voteUpdate)
+        .returning('*')
         .then(response => {
             if (response.length === 0) return Promise.reject({ status: 404, msg: 'Comment not found' })
-            response[0]['votes'] = response[0]['votes'] + voteUpdate;
+
             return response[0];
         })
 }
