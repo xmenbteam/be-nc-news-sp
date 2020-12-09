@@ -13,7 +13,7 @@ describe('/api', () => {
         return connection.seed.run()
     })
     describe('./api/topics', () => {
-        test('GETs all topics with status 200', () => {
+        test('200 - GETs all topics', () => {
             return request(app)
                 .get('/api/topics')
                 .expect(200)
@@ -27,9 +27,17 @@ describe('/api', () => {
                     })
                 })
         })
+        test('404 - topic not found', () => {
+            return request(app)
+                .get('/api/articles?topic=trample-stamps')
+                .expect(404)
+                .then(response => {
+                    expect(response.body.msg).toBe('Articles not found')
+                })
+        })
     })
     describe('./api/users/', () => {
-        test('GETs user by username with status 200', () => {
+        test('200 - GET user by username', () => {
             return request(app)
                 .get('/api/users/butter_bridge')
                 .expect(200)
@@ -41,7 +49,7 @@ describe('/api', () => {
                     })
                 })
         })
-        test('returns 404 error with invalid username', () => {
+        test('404 - error with invalid username', () => {
             return request(app)
                 .get('/api/users/notausername')
                 .expect(404)
@@ -106,21 +114,6 @@ describe('/api', () => {
                     )
                 })
         })
-        test('201 - posts a new comment associated with the article ID', () => {
-            const newComment = {
-                username: 'butter_bridge',
-                body: 'OMG I FREAKING LOVE THIS WOW YOU ARE SO GREAT'
-            }
-            return request(app)
-                .post('/api/articles/2')
-                .send(newComment)
-                .expect(201)
-                .then(response => {
-                    // console.log(response.body, 'response')
-                    // make sure body has a property that is auto filled in by the database
-                    expect(response.body).toHaveProperty('comment_id')
-                })
-        })
         test('404 - article not found', () => {
             const newComment = {
                 username: 'butter_bridge',
@@ -133,45 +126,6 @@ describe('/api', () => {
                 .then(response => {
                     // console.log(response.body)
                     expect(response.body.msg).toBe('Article not found')
-                })
-        })
-        test('200 - returns an array of all comments related to an article', () => {
-            return request(app)
-                .get('/api/articles/5/comments')
-                .expect(200)
-                .then(response => {
-                    expect(response.body.length).toBe(2)
-                    expect(response.body[0]).toMatchObject({
-                        votes: expect.any(Number),
-                        created_at: expect.any(String),
-                    })
-                })
-        })
-        test('200 - checks that comments are sorted by votes in asc order', () => {
-            return request(app)
-                .get('/api/articles/1/comments?sortBy=votes&order=DESC')
-                .expect(200)
-                .then(response => {
-                    // console.log(response.body, 'test response')
-                    expect(response.body.length).toBe(13)
-                    // expect(response.body).toBeSortedBy('created_by')
-                })
-        })
-        test('200 - checks that comments are sorted by created_by in asc order', () => {
-            return request(app)
-                .get('/api/articles/1/comments?sortBy=created_at&order=ASC')
-                .expect(200)
-                .then(response => {
-                    expect(response.body.length).toBe(13)
-                    expect(response.body).toBeSortedBy('created_at')
-                })
-        })
-        test('200 - gets an array of all articles', () => {
-            return request(app)
-                .get('/api/articles')
-                .expect(200)
-                .then(response => {
-                    expect(response.body.length).toBe(12)
                 })
         })
         test('200 - gets an array of all articles sorted by date', () => {
@@ -218,12 +172,12 @@ describe('/api', () => {
                     expect(allAboutMitch).toBe(true);
                 })
         })
-        test('404 - topic not found', () => {
+        test('200 - gets an array of all articles', () => {
             return request(app)
-                .get('/api/articles?topic=trample-stamps')
-                .expect(404)
+                .get('/api/articles')
+                .expect(200)
                 .then(response => {
-                    expect(response.body.msg).toBe('Articles not found')
+                    expect(response.body.length).toBe(12)
                 })
         })
         // test('delete article by article_id', () => {
@@ -232,8 +186,53 @@ describe('/api', () => {
         //         .expect(204)
         // })
     })
-
-    describe('api/comments', () => {
+    describe('./api/comments', () => {
+        test('201 - posts a new comment associated with the article ID', () => {
+            const newComment = {
+                username: 'butter_bridge',
+                body: 'OMG I FREAKING LOVE THIS WOW YOU ARE SO GREAT'
+            }
+            return request(app)
+                .post('/api/articles/2')
+                .send(newComment)
+                .expect(201)
+                .then(response => {
+                    // console.log(response.body, 'response')
+                    // make sure body has a property that is auto filled in by the database
+                    expect(response.body).toHaveProperty('comment_id')
+                })
+        })
+        test('200 - returns an array of all comments related to an article', () => {
+            return request(app)
+                .get('/api/articles/5/comments')
+                .expect(200)
+                .then(response => {
+                    expect(response.body.length).toBe(2)
+                    expect(response.body[0]).toMatchObject({
+                        votes: expect.any(Number),
+                        created_at: expect.any(String),
+                    })
+                })
+        })
+        test('200 - checks that comments are sorted by votes in asc order', () => {
+            return request(app)
+                .get('/api/articles/1/comments?sortBy=votes&order=DESC')
+                .expect(200)
+                .then(response => {
+                    // console.log(response.body, 'test response')
+                    expect(response.body.length).toBe(13)
+                    // expect(response.body).toBeSortedBy('created_by')
+                })
+        })
+        test('200 - checks that comments are sorted by created_by in asc order', () => {
+            return request(app)
+                .get('/api/articles/1/comments?sortBy=created_at&order=ASC')
+                .expect(200)
+                .then(response => {
+                    expect(response.body.length).toBe(13)
+                    expect(response.body).toBeSortedBy('created_at')
+                })
+        })
         test('PATCH new voteCount on comment by Id', () => {
             return request(app)
                 .patch('/api/comments/1')

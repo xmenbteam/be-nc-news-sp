@@ -4,9 +4,9 @@ exports.updateCommentById = (req, res, next) => {
     let id = req.params.comment_id
     let votes = req.body.inc_votes;
     updateCommentVote(id, votes)
-        .then(article => {
+        .then(comment => {
             res.status(200)
-                .send(article)
+                .send(comment)
         }).catch(next)
 }
 
