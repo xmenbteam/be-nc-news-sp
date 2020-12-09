@@ -23,17 +23,17 @@ It will then link it with which article is tagge in the comments database;
 }
 
 exports.updateArticleById = (id, voteUpdate) => {
+    // console.log('hello from the model')
     // if there's no vote count update, the error will be that you can't patch to something that isn't there.
     if (voteUpdate === undefined) { return Promise.reject({ status: 400, msg: 'Invalid Patch Request' }) }
-    return connection
-        .select("*")
-        .from('articles')
+    return connection('articles')
         .where('article_id', id)
+        .increment('votes', voteUpdate)
+        .returning('*')
         .then(response => {
+            // console.log(response, 'response in model')
             if (response.length === 0) return Promise.reject({ status: 404, msg: 'Article not found' })
-            // updates the votes with the new vote count.
-            response[0]['votes'] = response[0]['votes'] + voteUpdate
-            // response is an array with an object inside it.
+
             return response[0];
         })
 }
@@ -129,3 +129,13 @@ exports.fetchAllArticles = (sort_by = 'created_at', order = 'DESC', author, topi
             else return response;
         })
 }
+
+// exports.deleteArticleMachine = (id) => {
+//     return connection
+//         .del()
+//         .from('articles')
+//         .where('article_id', id)
+//         .then(response => {
+//             console.log(response, 'delete response')
+//         })
+// }

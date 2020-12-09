@@ -1,4 +1,4 @@
-const { fetchArticleById, updateArticleById, fetchCommentsById, newComment, fetchAllArticles } = require('../models/articles')
+const { fetchArticleById, updateArticleById, fetchCommentsById, newComment, fetchAllArticles, deleteArticleMachine } = require('../models/articles')
 
 exports.getArticleById = (req, res, next) => {
     // parametric endpoint:
@@ -17,6 +17,7 @@ exports.updateArticleById = (req, res, next) => {
     // console.log(votes, 'votes')
     updateArticleById(id, votes)
         .then(article => {
+            // console.log(article, 'article in contorller')
             res.status(200)
                 .send(article)
         }).catch(next)
@@ -66,3 +67,14 @@ exports.getAllArticles = (req, res, next) => {
                 .send(articles)
         }).catch(next);
 }
+
+// exports.deleteArticleById = (req, res, next) => {
+
+//     let id = req.params.article_id
+//     // console.log(id, 'id')
+//     deleteArticleMachine(id)
+//         .then(article => {
+//             console.log(article, 'article in cont')
+//             res.sendStatus(204)
+//         }).catch(next)
+// }

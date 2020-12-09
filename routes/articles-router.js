@@ -5,7 +5,8 @@ const articlesRouter = require('express').Router();
 articlesRouter.route('/:article_id')
     .get(getArticleById)
     .patch(updateArticleById)
-    .post(postCommentById);
+    .post(postCommentById)
+// .delete(deleteArticleMachine);
 articlesRouter.route('/:article_id/comments').get(getCommentsById);
 articlesRouter.route('/').get(getAllArticles);
 

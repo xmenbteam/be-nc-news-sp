@@ -106,7 +106,7 @@ describe('/api', () => {
                     )
                 })
         })
-        test('201 - posts a new commend associated with the article ID', () => {
+        test('201 - posts a new comment associated with the article ID', () => {
             const newComment = {
                 username: 'butter_bridge',
                 body: 'OMG I FREAKING LOVE THIS WOW YOU ARE SO GREAT'
@@ -226,7 +226,13 @@ describe('/api', () => {
                     expect(response.body.msg).toBe('Articles not found')
                 })
         })
+        // test('delete article by article_id', () => {
+        //     return request(app)
+        //         .delete('api/articles/1')
+        //         .expect(204)
+        // })
     })
+
     describe('api/comments', () => {
         test('PATCH new voteCount on comment by Id', () => {
             return request(app)

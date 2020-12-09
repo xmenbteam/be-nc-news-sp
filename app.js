@@ -5,6 +5,9 @@ const usersRouter = require('./routes/users-router.js');
 const articlesRouter = require('./routes/articles-router')
 const commentsRouter = require('./routes/comments-router')
 const { send404, handlePSQLErrors, handleCustomErrors, handleInternalErrors } = require('./errors')
+const cors = require('cors');
+
+app.use(cors());
 
 app.use(express.json());
 
