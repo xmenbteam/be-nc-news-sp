@@ -70,7 +70,7 @@ exports.newComment = (article_id, comment) => {
         })
 }
 
-exports.fetchCommentsById = (articleId, sortBy = 'created_at', order = 'DESC') => {
+exports.fetchCommentsById = (articleId, sort_by = 'created_at', order = 'DESC') => {
     /*
     Get all the comments related to an article...
     Article 5 has 2 comments...
@@ -84,7 +84,7 @@ exports.fetchCommentsById = (articleId, sortBy = 'created_at', order = 'DESC') =
             'body')
         .from('comments')
         .where('comments.article_id', '=', articleId)
-        .orderBy(sortBy, order)
+        .orderBy(sort_by, order)
         .then(response => {
             // console.log(response, 'model response')
             if (response.length === 0) return Promise

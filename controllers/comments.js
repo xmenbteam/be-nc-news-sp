@@ -5,6 +5,7 @@ exports.updateCommentById = (req, res, next) => {
     let votes = req.body.inc_votes;
     updateCommentVote(id, votes)
         .then(comment => {
+            console.log(comment, 'cont comm')
             res.status(200)
                 .send(comment)
         }).catch(next)

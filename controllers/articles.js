@@ -41,11 +41,11 @@ exports.getCommentsById = (req, res, next) => {
     // articleId is a PARAMetric endpoint
     let articleId = req.params.article_id
     // sortBy is a QUERY
-    let sortBy = req.query.sortBy
+    let sort_by = req.query.sort_by
     let order = req.query.order
     // console.log(order, 'order')
     // console.log(sortBy, 'sortBy')
-    fetchCommentsById(articleId, sortBy, order)
+    fetchCommentsById(articleId, sort_by, order)
         .then(comments => {
             // console.log(comments, 'comments')
             res.status(200)

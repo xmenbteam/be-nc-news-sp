@@ -134,8 +134,7 @@ describe('/api', () => {
                 .expect(200)
                 .then(response => {
                     expect(response.body.length).toBe(12)
-                    // console.log(response.body)
-                    // expect(response.body).toBeSortedBy(created_at)
+                    expect(response.body).toBeSortedBy('created_at')
                 })
         })
         test('200 - filters articles by author', () => {
@@ -216,12 +215,12 @@ describe('/api', () => {
         })
         test('200 - checks that comments are sorted by votes in asc order', () => {
             return request(app)
-                .get('/api/articles/1/comments?sortBy=votes&order=DESC')
+                .get('/api/articles/1/comments?sort_by=votes&order=ASC')
                 .expect(200)
                 .then(response => {
                     // console.log(response.body, 'test response')
                     expect(response.body.length).toBe(13)
-                    // expect(response.body).toBeSortedBy('created_by')
+                    expect(response.body).toBeSortedBy('votes')
                 })
         })
         test('200 - checks that comments are sorted by created_by in asc order', () => {
