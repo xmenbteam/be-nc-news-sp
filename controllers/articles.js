@@ -26,10 +26,10 @@ exports.updateArticleById = (req, res, next) => {
 exports.postCommentById = (req, res, next) => {
     // req.params - parametric endpoint
     // req.body - the sent comment.
-    let articleId = req.params.article_id
+    let article_id = req.params.article_id
     let comment = req.body
     // newComment() will process the request
-    newComment(articleId, comment)
+    newComment(article_id, comment)
         .then(comment => {
             // Formatted comment, including everything from MIGRATION.
             res.status(201)
