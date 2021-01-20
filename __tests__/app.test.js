@@ -125,7 +125,6 @@ describe("/api", () => {
         .send(newComment)
         .expect(404)
         .then((response) => {
-          // console.log(response.body)
           expect(response.body.msg).toBe("Article not found");
         });
     });
@@ -143,7 +142,6 @@ describe("/api", () => {
         .get("/api/articles?author=butter_bridge")
         .expect(200)
         .then((response) => {
-          // console.log(response.body)
           expect(response.body.length).toBe(3);
           const allButterBridge = response.body.every((article) => {
             return article.author === "butter_bridge";
@@ -164,7 +162,6 @@ describe("/api", () => {
         .get("/api/articles?topic=mitch")
         .expect(200)
         .then((response) => {
-          // console.log(response.body)
           expect(response.body.length).toBe(11);
           const allAboutMitch = response.body.every((article) => {
             return article.topic === "mitch";
@@ -192,7 +189,6 @@ describe("/api", () => {
         .send(newComment)
         .expect(201)
         .then((response) => {
-          // console.log(response.body, 'response')
           // make sure body has a property that is auto filled in by the database
           expect(response.body).toHaveProperty("comment_id");
         });
@@ -214,7 +210,6 @@ describe("/api", () => {
         .get("/api/articles/1/comments?sort_by=votes&order=ASC")
         .expect(200)
         .then((response) => {
-          // console.log(response.body, 'test response')
           expect(response.body.length).toBe(13);
           expect(response.body).toBeSortedBy("votes");
         });

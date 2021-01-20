@@ -28,9 +28,8 @@ const handleCustomErrors = (err, req, res, next) => {
 const handleInternalErrors = (err, req, res, next) => {
   /*
     THIS IS WHERE YOUR ERRORS GO AT THE END
-    Use the console.log to see where your error is coming from.
     */
-  console.log(err);
+
   res.status(500).send({ msg: "Internal Servor Error" });
 };
 

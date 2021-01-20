@@ -24,7 +24,6 @@ It will then link it with which article is tagge in the comments database;
 };
 
 exports.updateArticleById = (id, voteUpdate) => {
-  // console.log('hello from the model')
   // if there's no vote count update, the error will be that you can't patch to something that isn't there.
   if (voteUpdate === undefined) {
     return Promise.reject({ status: 400, msg: "Invalid Patch Request" });
@@ -34,7 +33,6 @@ exports.updateArticleById = (id, voteUpdate) => {
     .increment("votes", voteUpdate)
     .returning("*")
     .then((response) => {
-      // console.log(response, 'response in model')
       if (response.length === 0)
         return Promise.reject({ status: 404, msg: "Article not found" });
 
@@ -69,7 +67,7 @@ exports.newComment = (article_id, comment) => {
       // if (insComment.length === 0) return Promise
       //     .reject({ status: 404, msg: 'Articles not found' })
       // // returns an array -> we need an object - return first entry in array.
-      // // console.log(insComment)
+
       return insComment[0];
     });
 };
@@ -83,14 +81,13 @@ exports.fetchCommentsById = (
     Get all the comments related to an article...
     Article 5 has 2 comments...
     */
-  // console.log(articleId, sortBy, order)
+
   return connection
     .select("comment_id", "author", "votes", "created_at", "body")
     .from("comments")
     .where("comments.article_id", "=", articleId)
     .orderBy(sort_by, order)
     .then((response) => {
-      // console.log(response, 'model response')
       if (response.length === 0)
         return Promise.reject({ status: 404, msg: "Comments not found" });
       return response;
@@ -103,12 +100,11 @@ exports.fetchAllArticles = (
   author,
   topic
 ) => {
-  // console.log('in the model')
   /*
     Was having a bad time with the ambiguity of the query.
     NEED ERROR HANDLING
     */
-  // console.log(sort_by, 'sortby')
+
   if (sort_by === "date") sort_by = "created_at";
   else if (sort_by === "title") sort_by = "articles.title";
   return connection
@@ -133,19 +129,8 @@ exports.fetchAllArticles = (
     .groupBy("articles.article_id")
     .orderBy(sort_by, order)
     .then((response) => {
-      // console.log(response, 'model response')
       if (response.length === 0)
         return Promise.reject({ status: 404, msg: "Articles not found" });
       else return response;
     });
 };
-
-// exports.deleteArticleMachine = (id) => {
-//     return connection
-//         .del()
-//         .from('articles')
-//         .where('article_id', id)
-//         .then(response => {
-//             console.log(response, 'delete response')
-//         })
-// }

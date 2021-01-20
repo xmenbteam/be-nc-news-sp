@@ -1,38 +1,43 @@
-
 const {
   topicData,
   userData,
   articleData,
   commentData,
-} = require('../data/index.js');
+} = require("../data/index.js");
 
-const { createArticleRef, formatCommentData, formatDate } = require('../utils/data-manipulation')
+const {
+  createArticleRef,
+  formatCommentData,
+  formatDate,
+} = require("../utils/data-manipulation");
 
 exports.seed = function (connection) {
   return connection.migrate
     .rollback()
     .then(() => {
-      return connection.migrate.latest()
+      return connection.migrate.latest();
     })
     .then(() => {
-      return connection.insert(topicData).into('topics').returning('*');
+      return connection.insert(topicData).into("topics").returning("*");
     })
     .then(() => {
-      // console.log(`added ${topicRows.length} topics`)
-      return connection.insert(userData).into('users').returning('*');
+      return connection.insert(userData).into("users").returning("*");
     })
     .then(() => {
-      // console.log(`added ${userRows.length} users`)
-      const dateFormatArticle = formatDate(articleData)
-      return connection.insert(dateFormatArticle).into('articles').returning('*')
+      const dateFormatArticle = formatDate(articleData);
+      return connection
+        .insert(dateFormatArticle)
+        .into("articles")
+        .returning("*");
     })
-    .then(articleRows => {
-      // console.log(`added ${articleRows.length} users`)
-      const dateFormatComment = formatDate(commentData)
-      const articleRef = createArticleRef(articleRows)
-      const formattedComment = formatCommentData(dateFormatComment, articleRef)
-      // console.log(formattedComment)
+    .then((articleRows) => {
+      const dateFormatComment = formatDate(commentData);
+      const articleRef = createArticleRef(articleRows);
+      const formattedComment = formatCommentData(dateFormatComment, articleRef);
 
-      return connection.insert(formattedComment).into('comments').returning('*')
-    })
+      return connection
+        .insert(formattedComment)
+        .into("comments")
+        .returning("*");
+    });
 };
